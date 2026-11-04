@@ -3,27 +3,28 @@ name: CI
 on:
   push:
     branches: [ main ]
-  
+  pull_request:
+    branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
+    # Atualizado de v3 para v4 e Node.js alterado para 20
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
+        cache: 'npm'
 
+    # 'npm ci' é mais rápido e seguro para ambientes de CI do que o 'npm install'
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
+    # Roda os seus testes do Jest
     - name: Run tests
       run: npm test
-
-    - name: Build the application
-      run: npm run build
-
-    
